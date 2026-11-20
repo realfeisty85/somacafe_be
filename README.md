@@ -1,73 +1,148 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# Soma Cafe — Backend API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend for **Soma Cafe**, a social platform with posts, polls, follows, notifications, direct messaging, live chat and live streams. Built with NestJS and TypeScript.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+> **Status:** The production service has been shut down. This repository is a cleaned copy of the code: it contains **no user data and no credentials**. All secrets are read from environment variables (see [`env.sample`](env.sample)).
 
-## Description
+## Features
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Accounts**: invite-code registration, login with JWT access/refresh tokens, profile editing, avatars and backgrounds, password reset by email
+- **Posts**: text, images, link previews, polls, comments, likes, quotes, hashtags, mentions, bookmarks, editing and deletion
+- **Social graph**: follow / unfollow, who-to-follow suggestions, mute and block
+- **Moderation**: post reports, bug reports, live-chat mutes, blocks and warnings
+- **Notifications**: in-app notifications with per-user settings, optional push delivery
+- **Search**: users, posts and hashtags
+- **Messaging**: one-to-one chat rooms (RethinkDB)
+- **Live**: live-stream records, stream-start/end/recording webhooks, video posts processed with ffmpeg, real-time live chat over WebSockets
+- **Custom emoji**: per-user emoji uploads plus a standard emoji set
 
-## Installation
+## Tech stack
 
-```bash
-$ npm install
+| Area | Technology |
+| --- | --- |
+| Framework | NestJS 8, TypeScript 4 |
+| Main database | MySQL (TypeORM 0.2, entities + migrations) |
+| Messaging store | RethinkDB |
+| Real-time | Socket.io (`@nestjs/websockets`) |
+| Auth | Passport (local + JWT) |
+| Media | sharp (images), fluent-ffmpeg / ffprobe (video) |
+| Email | Nodemailer + Handlebars templates |
+| API docs | Swagger (`/api`) |
+| Tests | Jest, Supertest |
+
+## Project layout
+
+```
+src/
+  apis/            HTTP controllers + services, one module per feature
+                   (user, login, post, follow, search, messaging, stream, …;
+                   several features have a v1 and a v2 module)
+  repositories/    TypeORM entities, DTOs and data-access services
+  auth/            Passport strategies, JWT guard, token issuing
+  chat/            Live-chat WebSocket gateway
+  modules/         Shared services: mail, security (password encryption), redis
+  exceptions/      Custom exceptions
+migrations/        TypeORM migrations
+views/mail/        Handlebars email templates
+public/            Static files and uploaded media (uploads are git-ignored)
+test/              End-to-end test setup
 ```
 
-## Running the app
+Request flow: **controller (`apis/`) → API service → repository service (`repositories/`) → TypeORM / MySQL**. Cross-feature events (new post, notification, stream state) go through `@nestjs/event-emitter`.
+
+## API overview
+
+About 140 REST endpoints, grouped by route prefix. With the app running, the full interactive reference is at `http://localhost:<APP_PORT>/api`.
+
+| Prefix | Purpose |
+| --- | --- |
+| `user/v1`, `user/v2` | Registration, profiles, invites, settings |
+| `login/v1` | Login and token refresh |
+| `reset/v1` | Password reset |
+| `post/v1`, `post/v2` | Feed, posts, comments, likes, polls |
+| `follow/v1`, `follow/v2` | Follow graph |
+| `search/v1`, `search/v2` | Search |
+| `notify/v1` | Notifications and notification settings |
+| `messaging/v1` | Chat rooms and messages |
+| `stream/v1` | Live streams, recordings and streaming-server webhooks |
+| `mute/v1`, `block/v1`, `report/v1`, `bug/v1` | Moderation and bug reports |
+| `bookmark-api`, `emoji-api`, `status/v1` | Bookmarks, emoji, health status |
+
+**WebSockets:** the post gateway runs on the HTTP port, and the live-chat gateway runs on `WSS_PORT` (websocket transport only).
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 16 or newer, npm
+- MySQL 5.7+ (or MariaDB)
+- RethinkDB, needed only for direct messaging
+- A local SMTP catcher such as MailHog, needed only for testing emails
+- Linux or macOS shell (the `start:dev` and `build` scripts use POSIX syntax)
+
+`docker-compose.yml` starts MySQL, RethinkDB and Adminer if you use Docker.
+
+### Setup
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
+cp env.sample .env          # then edit the values
 ```
 
-## Test
+Create the database named in `MYSQL_DATABASE`. In development (`NODE_ENV=development`), TypeORM `synchronize` creates the tables from the entities. Migrations live in `migrations/`:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm run typeorm:run-migrations
 ```
 
-## Support
+### Run
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+npm run start:dev           # watch mode, NODE_ENV=development
+npm run start               # plain start
+npm run build && npm run start:prod
+```
 
-## Stay in touch
+### Configuration
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+All configuration comes from `.env`. Never commit real values.
+
+| Variable | Purpose |
+| --- | --- |
+| `APP_PORT`, `WSS_PORT` | HTTP / Swagger port, live-chat WebSocket port |
+| `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USERNAME`, `MYSQL_PASSWORD`, `MYSQL_DATABASE` | Main database |
+| `CIPHER_KEY` | 16-character key used by `SecurityService` (AES-128-CBC) |
+| `JWT_SECRET`, `JWT_REFRESH_SECRET` | Access- and refresh-token signing |
+| `API_AUTH_LOGIN`, `API_AUTH_PASSWORD` | HTTP Basic credentials for API clients; `LoggingInterceptor` accepts a request carrying these or a JWT |
+| `IMAGES_URL` | Public base URL prepended to media paths and invite links |
+| `REDIS_HOST`, `REDIS_PORT`, `REDIS_DB` | Redis cache (wiring is currently commented out in `RedisModule`) |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` | Outgoing mail |
+| `STREAM_API_URL`, `STREAM_RECORDS_FOLDER_PATH` | External streaming server and its recordings folder |
+| `FCM_SERVER_KEY` | Push notifications (optional) |
+| `FACEBOOK_ACCESS_TOKEN`, `TWITTER_BEARER_TOKEN` | Link-preview enrichment for Facebook / X posts (optional) |
+
+Optional integrations stay inactive when their variables are empty.
+
+## Tests
+
+```bash
+npm run test         # unit tests
+npm run test:e2e     # end-to-end tests
+npm run test:cov     # coverage
+```
+
+The existing spec files are mostly generated scaffolding. Real test coverage still has to be written.
+
+## Known limitations
+
+- **No seed data**: the repository ships without any database content, so a fake-data generator is needed to try the app.
+- **No frontend**: the web client is not part of this repository.
+- **External services**: link previews (X, Facebook, TikTok, microlink), push notifications, email and live streaming call outside services.
+- **RethinkDB connection** is hardcoded to `localhost:28015` in `src/apis/messaging-api/rethinkdb.provider.ts`.
+- **Request gate exits the process**: `LoggingInterceptor` (used on most controllers) calls `process.exit(1)` when a request has neither the Basic credentials nor a JWT, so a single unauthenticated request stops the server.
+- **Password storage** uses reversible AES encryption rather than a one-way hash such as bcrypt or argon2.
+- **Duplicated v1/v2 modules** for several features, from an in-progress API rewrite.
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+No license has been chosen yet, so all rights are reserved by the author.
