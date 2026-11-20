@@ -9,7 +9,7 @@
 ![MySQL](https://img.shields.io/badge/MySQL-5.7%2B-4479A1?logo=mysql&logoColor=white)
 ![RethinkDB](https://img.shields.io/badge/RethinkDB-messaging-333333)
 ![Socket.io](https://img.shields.io/badge/Socket.io-4-010101?logo=socketdotio&logoColor=white)
-![License](https://img.shields.io/badge/license-all%20rights%20reserved-lightgrey)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 </div>
 
@@ -329,4 +329,4 @@ Most existing spec files are generated scaffolding. Meaningful unit and e2e cove
 
 ## License
 
-No license has been granted. All rights are reserved by the author.
+Released under the [MIT License](LICENSE). Copyright (c) 2021-2026 Soma Cafe.
