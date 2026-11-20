@@ -329,4 +329,4 @@ Most existing spec files are generated scaffolding. Meaningful unit and e2e cove
 
 ## License
 
-Released under the [MIT License](LICENSE). Copyright (c) 2021-2026 Soma Cafe.
+Released under the [MIT License](LICENSE). Copyright (c) 2021-2026 realfeisty85.
