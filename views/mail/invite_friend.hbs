@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang='en'>
+<head>
+  <title>Invite Friend</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <style type="text/css">
+
+    * {
+      margin: 0;
+      padding: 0;
+      font-size: 100%;
+      font-family: 'Avenir Next', "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+      line-height: 1.65;
+    }
+
+    img {
+      max-width: 100%;
+      margin: 0 auto;
+      display: block;
+    }
+
+    body, .body-wrap {
+      width: 100% !important;
+      height: 100%;
+      background: #f8f8f8;
+    }
+
+    a {
+      color: #71bc37;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    i {
+      font-size: 14px;
+      color: #0098FF;
+      font-weight: bold;
+    }
+
+    h2 {
+      font-size: 16px;
+      color: #0098FF;
+    }
+
+    h1 {
+      font-size: 32px;
+      color: #0098FF;
+    }
+
+    p, ul, ol {
+      font-size: 12px;
+      font-weight: normal;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      display: block !important;
+      clear: both !important;
+      margin: 0 auto !important;
+      max-width: 580px !important;
+    }
+
+    .container table {
+      width: 100% !important;
+      border-collapse: collapse;
+    }
+
+    .container .content {
+      background: white;
+      padding: 30px 35px;
+    }
+
+    .container .content.footer {
+      background: white;
+    }
+
+    .container .content.footer p {
+      margin-bottom: 0;
+      color: #888;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .container .content.footer a {
+      color: #888;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .container .content.footer a:hover {
+      text-decoration: underline;
+    }
+
+    .container .masthead {
+      padding: 20px 20px 0 20px;
+      background: #0098FF;
+      color: #FFFFFF;
+    }
+
+    .container .masthead h1 {
+      margin: 0 auto !important;
+      max-width: 100%;
+      text-transform: uppercase;
+    }
+
+    .container .masthead a {
+      color: #FFFFFF;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .container .masthead a:hover {
+      text-decoration: underline;
+    }
+
+  </style>
+
+</head>
+
+<body>
+<table class="body-wrap content">
+  <tr>
+    <td class="container">
+      <table>
+        <tr>
+          <td align="center">
+            <img src="https://soma.cafe/images/logo-black.png" style="width: 100%; margin-top: 20px;" alt='Soma Cafe'>
+          </td>
+        </tr>
+        <tr>
+          <td align="center">
+            <h1>Social Media For Free Thinkers</h1>
+          </td>
+        </tr>
+        <tr>
+          <td class="content">
+            <h2>Hi {{friendName}}</h2>
+            <br>
+            <p>You have been invited to Soma Cafe by <i>{{somaUsername}}</i></p>
+            <p>Please click on the below accept invite link. This will take you directly to Soma Cafe's Registation page with your reigstration code already completed!</p>
+            <h2><a href='{{inviteUrl}}'>Click here to accept invite.</a></h2>
+            <br>
+            <p>Having trouble? <br/> Click here to register: {{inviteUrl}}</p>
+            <p><i>{{somaUsername}}</i> will be added to your friend list once you sign up.</p>
+            <p><em>– The Soma Cafe Team</em></p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td class="container">
+      <table>
+        <tr>
+          <td align="center" class="masthead justify-content-between">
+            <p><a href="https://soma.cafe/about-us">About Us</a> &nbsp; &nbsp; | &nbsp; &nbsp;
+              <a href="https://soma.cafe/terms-of-service">Terms of Service</a> &nbsp; &nbsp;| &nbsp; &nbsp;
+              <a href="https://soma.cafe/privacy-policy">Privacy Policy</a></p>
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td class="container">
+      <table>
+        <tr>
+          <td class="content footer" align="center">
+            <p>Sent by <a href="https://soma.cafe">Soma Cafe</a>, 401 Ryland St, STE200-A, Nevada, 89502</p>
+            <p><a href="mailto:support@somatekco.com">support@somatekco.com</a>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

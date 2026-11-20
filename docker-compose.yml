@@ -1,0 +1,28 @@
+version: '3'
+services:
+  rethinkdb:
+    image: rethinkdb:latest
+    ports:
+      - "8080:8080"
+      - "29015:29015"
+      - "28015:28015"
+    volumes:
+      - ./data:/data
+  mysql:
+    image: mysql:5.7.34
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./:/app
+      - ./datamysql:/var/lib/mysql
+    platform: linux/x86_64
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080
+volumes:
+  rethindb-data:
+    external: true
